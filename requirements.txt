@@ -1,0 +1,7 @@
+requests
+tweepy
+google-generativeai
+
+
+beautifulsoup4
+
