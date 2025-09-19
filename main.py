@@ -18,17 +18,20 @@ genai.configure(api_key=GEMINI_API_KEY)
 def get_latest_reuters_news():
     """ロイターの最新ニュースを取得する"""
     # ロイターのRSSフィードURL (例: トップニュース)
-    rss_url = "http://feeds.reuters.com/Reuters/worldNews"
+        url = "https://www.reuters.com/"
     try:
-        response = requests.get(rss_url)
-        response.raise_for_status() # HTTPエラーがあれば例外を発生させる
+        response = requests.get(url)
+        response.raise_for_status()
         from bs4 import BeautifulSoup
-        soup = BeautifulSoup(response.content, 'xml')
-        item = soup.find('item')
-        if item:
-            title = item.find('title').text if item.find('title') else "No Title"
-            link = item.find('link').text if item.find('link') else "#"
-            description = item.find('description').text if item.find('description') else "No Description"
+        soup = BeautifulSoup(response.content, 'html.parser')
+        # 最新のニュース記事を探す (セレクタはReutersのウェブサイト構造によって変わる可能性があります)
+        # 例: 最初の記事のリンクとタイトル、概要を取得
+        article = soup.find('a', class_='media-story-card__heading__link') # 適切なセレクタに修正
+        if article:
+            title = article.text.strip()
+            link = "https://www.reuters.com" + article['href'] if article.has_attr('href') else "#"
+            # 概要は別途取得する必要があるかもしれません。今回はタイトルとリンクのみとします。
+            description = title # 一旦タイトルを概要として使用
             return {
                 "title": title,
                 "link": link,
