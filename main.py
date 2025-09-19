@@ -8,6 +8,7 @@ from datetime import datetime
 # 環境変数の設定
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DEEPAI_API_KEY = os.getenv("DEEPAI_API_KEY")
+NEWSAPI_API_KEY = os.getenv("NEWSAPI_API_KEY")
 X_API_KEY = os.getenv("X_API_KEY")
 X_API_SECRET = os.getenv("X_API_SECRET")
 X_ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN")
@@ -15,30 +16,30 @@ X_ACCESS_TOKEN_SECRET = os.getenv("X_ACCESS_TOKEN_SECRET")
 
 genai.configure(api_key=GEMINI_API_KEY)
 
+from newsapi import NewsApiClient
+
 def get_latest_reuters_news():
-    """ロイターの最新ニュースを取得する"""
-    # ロイターのRSSフィードURL (例: トップニュース)
-    url = "https://www.reuters.com/"
+    """NewsAPI.orgからロイターの最新ニュースを取得する"""
+    newsapi_key = os.getenv("NEWSAPI_API_KEY")
+    if not newsapi_key:
+        print("NEWSAPI_API_KEYが設定されていません。")
+        return None
+
+    newsapi = NewsApiClient(api_key=newsapi_key)
+
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(response.content, 'html.parser')
-        # 最新のニュース記事を探す (セレクタはReutersのウェブサイト構造によって変わる可能性があります)
-        # 例: 最初の記事のリンクとタイトル、概要を取得
-        article = soup.find('a', class_='media-story-card__heading__link') # 適切なセレクタに修正
-        if article:
-            title = article.text.strip()
-            link = "https://www.reuters.com" + article['href'] if article.has_attr('href') else "#"
-            # 概要は別途取得する必要があるかもしれません。今回はタイトルとリンクのみとします。
-            description = title # 一旦タイトルを概要として使用
+        # ロイターの最新ニュースを検索
+        top_headlines = newsapi.get_everything(q='Reuters', language='en', sort_by='publishedAt', domains='reuters.com')
+
+        if top_headlines['articles']:
+            article = top_headlines['articles'][0]
             return {
-                "title": title,
-                "link": link,
-                "description": description
+                "title": article['title'],
+                "link": article['url'],
+                "description": article['description'] if article['description'] else article['title']
             }
         return None
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         print(f"ニュース取得エラー: {e}")
         return None
 

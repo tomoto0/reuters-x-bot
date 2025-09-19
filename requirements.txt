@@ -5,3 +5,6 @@ google-generativeai
 
 beautifulsoup4
 
+
+newsapi-python
+
