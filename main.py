@@ -18,7 +18,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 def get_latest_reuters_news():
     """ロイターの最新ニュースを取得する"""
     # ロイターのRSSフィードURL (例: トップニュース)
-        url = "https://www.reuters.com/"
+    url = "https://www.reuters.com/"
     try:
         response = requests.get(url)
         response.raise_for_status()
