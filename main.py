@@ -36,11 +36,14 @@ def get_latest_reuters_news():
         if top_headlines["articles"]:
             print(f"First article title: {top_headlines["articles"][0]["title"]}")
             article = top_headlines["articles"][0]
-            return {
-                "title": article['title'],
-                "link": article['url'],
-                "description": article['description'] if article['description'] else article['title']
+            print(f"Article found: {article}")
+            news_data = {
+                "title": article["title"],
+                "link": article["url"],
+                "description": article["description"] if article["description"] else article["title"]
             }
+            print(f"Returning news data: {news_data}")
+            return news_data
         return None
     except Exception as e:
         print(f"ニュース取得エラー: {e}")
