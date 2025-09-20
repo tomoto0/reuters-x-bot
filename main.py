@@ -31,8 +31,11 @@ def get_latest_reuters_news():
         # ロイターの最新ニュースを検索
         top_headlines = newsapi.get_everything(q='Reuters', language='en', sort_by='publishedAt', domains='reuters.com')
 
-        if top_headlines['articles']:
-            article = top_headlines['articles'][0]
+        print(f"NewsAPI response status: {top_headlines["status"]}")
+        print(f"NewsAPI total results: {top_headlines["totalResults"]}")
+        if top_headlines["articles"]:
+            print(f"First article title: {top_headlines["articles"][0]["title"]}")
+            article = top_headlines["articles"][0]
             return {
                 "title": article['title'],
                 "link": article['url'],
