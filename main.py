@@ -33,6 +33,7 @@ def get_latest_reuters_news():
 
         print(f"NewsAPI response status: {top_headlines["status"]}")
         print(f"NewsAPI total results: {top_headlines["totalResults"]}")
+        print(f"NewsAPI articles: {top_headlines["articles"]}")
         if top_headlines["articles"]:
             print(f"First article title: {top_headlines["articles"][0]["title"]}")
             article = top_headlines["articles"][0]
