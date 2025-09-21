@@ -44,7 +44,9 @@ def get_latest_reuters_news():
             }
             print(f"Returning news data: {news_data}")
             return news_data
-        return None
+        else:
+            print("NewsAPIから記事が取得できませんでした。")
+            return None
     except Exception as e:
         print(f"ニュース取得エラー: {e}")
         return None
