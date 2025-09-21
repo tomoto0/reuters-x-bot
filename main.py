@@ -28,23 +28,22 @@ def get_latest_reuters_news():
     newsapi = NewsApiClient(api_key=newsapi_key)
 
     try:
-        # ロイターの最新ニュースを検索
-        top_headlines = newsapi.get_everything(q='Reuters', language='en', sort_by='publishedAt', domains='reuters.com')
-
-        print(f"NewsAPI response status: {top_headlines["status"]}")
+        # ロイターの最新ニュー        top_headlines = newsapi.get_everything(q=\'Reuters\', language=\'en\', sort_by=\'publishedAt\')       print(f"NewsAPI response status: {top_headlines["status"]}")
         print(f"NewsAPI total results: {top_headlines["totalResults"]}")
         print(f"NewsAPI articles: {top_headlines["articles"]}")
         if top_headlines["articles"]:
-            print(f"First article title: {top_headlines["articles"][0]["title"]}")
-            article = top_headlines["articles"][0]
-            print(f"Article found: {article}")
-            news_data = {
-                "title": article["title"],
-                "link": article["url"],
-                "description": article["description"] if article["description"] else article["title"]
-            }
-            print(f"Returning news data: {news_data}")
-            return news_data
+            for article in top_headlines["articles"]:
+                if article["source"] and "reuters" in article["source"]["name"].lower():
+                    print(f"Found Reuters article: {article["title"]}")
+                    news_data = {
+                        "title": article["title"],
+                        "link": article["url"],
+                        "description": article["description"] if article["description"] else article["title"]
+                    }
+                    print(f"Returning news data: {news_data}")
+                    return news_data
+            print("NewsAPIからReutersの記事が見つかりませんでした。")
+            return None
         else:
             print("NewsAPIから記事が取得できませんでした。")
             return None
