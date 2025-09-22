@@ -28,18 +28,18 @@ def get_latest_reuters_news():
     newsapi = NewsApiClient(api_key=newsapi_key)
 
     try:
-        # ロイターの最新ニュー        sources_response = newsapi.get_sources(language=\'en\', country=\'us\')
+        #         sources_response = newsapi.get_sources(language='en', country='us')
         reuters_source_id = None
-        for source in sources_response[\'sources\']:
-            if source[\'name\'] == \'Reuters\':
-                reuters_source_id = source[\'id\']
+        for source in sources_response['sources']:
+            if source['name'] == 'Reuters':
+                reuters_source_id = source['id']
                 break
 
         if not reuters_source_id:
-            print(\"ReutersのソースIDが見つかりませんでした。\")
+            print("ReutersのソースIDが見つかりませんでした。")
             return None
 
-        top_headlines = newsapi.get_top_headlines(sources=reuters_source_id, language=\'en\')
+        top_headlines = newsapi.get_top_headlines(sources=reuters_source_id, language='en')
         print(f"NewsAPI response status: {top_headlines["status"]}")
         print(f"NewsAPI total results: {top_headlines["totalResults"]}")
         print(f"NewsAPI articles: {top_headlines["articles"]}")
