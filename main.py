@@ -23,48 +23,44 @@ def get_latest_reuters_news():
     newsapi_key = os.getenv("NEWSAPI_API_KEY")
     if not newsapi_key:
         print("NEWSAPI_API_KEYが設定されていません。")
-        return None
+        return Non    newsapi = NewsApiClient(api_key=newsapi_key)
 
     newsapi = NewsApiClient(api_key=newsapi_key)
 
     try:
-        sources_response = newsapi.get_sources(language=\'en\', country=\'us\')
-        if sources_response[\'status\'] != \'ok\':
+        sources_response = newsapi.get_sources(language='en', country='us')
+        if sources_response['status'] != 'ok':
             print(f"NewsAPI sources error: {sources_response}")
-            return None
-
-        reuters_source_id = None
-        for source in sources_response[\'sources\']:
-            if source[\'name\'] == \'Reuters\':
-                reuters_source_id = source[\'id\']
+            return None     for source in sources_response['sources']:
+            if source['name'] == 'Reuters':
+                reuters_source_id = source['id']
                 break
 
         if not reuters_source_id:
             print("NewsAPIからReutersのソースIDが見つかりませんでした。")
             return None
 
-        top_headlines = newsapi.get_top_headlines(sources=reuters_source_id, language=\'en\')
-        if top_headlines[\'status\'] != \'ok\':
+        top_headlines = newsapi.get_top_headlines(sources=reuters_source_id, language='en')
+        if top_headlines['status'] != 'ok':
             print(f"NewsAPI top headlines error: {top_headlines}")
             return None
 
-        print(f"NewsAPI response status: {top_headlines[\"status\"]}")
-        print(f"NewsAPI total results: {top_headlines[\"totalResults\"]}")
-        print(f"NewsAPI articles: {top_headlines[\"articles\"]}")
+        print(f"NewsAPI response status: {top_headlines['status']}")
+        print(f"NewsAPI total results: {top_headlines['totalResults']}")
+        print(f"NewsAPI articles: {top_headlines['articles']}")
 
-        if top_headlines[\'articles\']:
-            article = top_headlines[\'articles\'][0] # 最初の記事を使用
+        if top_headlines['articles']:
+            article = top_headlines['articles'][0] # 最初の記事を使用
             news_data = {
-                "title": article[\"title\"] if article[\"title\"] else "No Title",
-                "link": article[\"url\"] if article[\"url\"] else "#",
-                "description": article[\"description\"] if article[\"description\"] else article[\"title\"]
+                "title": article['title'] if article['title'] else "No Title",
+                "link": article['url'] if article['url'] else "#",
+                "description": article['description'] if article['description'] else article['title']
             }
             print(f"Returning news data: {news_data}")
             return news_data
         else:
             print("NewsAPIから記事が取得できませんでした。")
-            return None
-    except Exception as e:
+            return None:
         print(f"ニュース取得エラー: {e}")
         return None
 
