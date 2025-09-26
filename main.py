@@ -34,30 +34,30 @@ def get_latest_reuters_news():
             return None
 
         reuters_source_id = None
-        for source in sources_response[\'sources\']:
-            if source[\'name\'] == \'Reuters\':
-                reuters_source_id = source[\'id\']
+        for source in sources_response["sources"]:
+            if source["name"] == "Reuters":
+                reuters_source_id = source["id"]
                 break
 
         if not reuters_source_id:
             print("NewsAPIからReutersのソースIDが見つかりませんでした。")
             return None
 
-        top_headlines = newsapi.get_top_headlines(sources=reuters_source_id, language=\'en\')
-        if top_headlines[\'status\'] != \'ok\':
+        top_headlines = newsapi.get_top_headlines(sources=reuters_source_id, language='en')
+        if top_headlines['status'] != 'ok':
             print(f"NewsAPI top headlines error: {top_headlines}")
             return None
 
-        print(f"NewsAPI response status: {top_headlines[\'status\']}")
-        print(f"NewsAPI total results: {top_headlines[\'totalResults\']}")
-        print(f"NewsAPI articles: {top_headlines[\'articles\']}")
+        print(f"NewsAPI response status: {top_headlines['status']}")
+        print(f"NewsAPI total results: {top_headlines['totalResults']}")
+        print(f"NewsAPI articles: {top_headlines['articles']}")
 
-        if top_headlines[\'articles\']:
-            article = top_headlines[\'articles\'][0] # 最初の記事を使用
+        if top_headlines['articles']:
+            article = top_headlines['articles'][0] # 最初の記事を使用
             news_data = {
-                "title": article[\'title\'] if article[\'title\'] else "No Title",
-                "link": article[\'url\'] if article[\'url\'] else "#",
-                "description": article[\'description\'] if article[\'description\'] else article[\'title\']
+                "title": article['title'] if article['title'] else "No Title",
+                "link": article['url'] if article['url'] else "#",
+                "description": article['description'] if article['description'] else article['title']
             }
             print(f"Returning news data: {news_data}")
             return news_data
